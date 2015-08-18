@@ -17,20 +17,41 @@ class User(db.Model):
     name = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(20))
-    timestamp = db.Column(db.DateTime(timezone=True), sql.func.now())
+    timestamp = db.Column(db.DateTime(timezone=True), default=sql.func.now())
 
     def __repr__(self):
-        return "< users_id:{0},{1},{2}".format(self.id, self.name, self.email)
+        return u"< user_id:{0},{1},{2} >".format(self.id, self.name, self.email)
 
 
 class Problem(db.Model):
-    __tablename__='problems'
-    id=db.Column(db.Integer,primary_key=True)
-    title=db.Column(db.String(200),unique=True,nullable=False)
-    detail=db.Column(db.String(500))
+    __tablename__ = 'problems'
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), unique=True, nullable=False)
+    detail = db.Column(db.String(500))
 
-    creator_id=db.Column(db.Integer,db.ForeignKey)
-    creator=db.relationship('User',backref='problems')
+    creator_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    creator = db.relationship('User', backref='problems')
 
     def __repr__(self):
-        return
+        return u"< problem_id:{0},{1},cid: {2} >".format(self.id, self.title, self.creator_id)
+
+
+class Solution(db.Model):
+    __tablename__ = 'solutions'
+    id = db.Column(db.Integer, primary_key=True)
+    detail = db.Column(db.String(1000))
+    score = db.Column(db.Integer, default=0)
+    candidate_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    candidate = db.relationship('User', backref='solutions')
+    problem_id = db.Column(db.Integer, db.ForeignKey('problems.id'))
+    problem = db.relationship('Problem', backref='solutions')
+
+    def __repr__(self):
+        return u"< solution_id:{0},{1},cid:{2},pid:{3} >".format(self.id, self.detail, self.candidate_id,
+                                                                 self.problem_id)
+
+
+if __name__ == '__main__':
+    db.drop_all()
+    db.create_all()
+    print('rebuild database')
