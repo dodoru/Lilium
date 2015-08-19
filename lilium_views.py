@@ -155,6 +155,7 @@ def problem_id(problem_id):
     return render_template('problem_id.html', problem=problem_data, solutions=solutions_data)
 
 
+# only admin can check out the information of users
 @app.route('/settings/user/list', methods=['POST', 'GET'])
 def user_list():
     user_id = session.get('user_id')
@@ -167,82 +168,78 @@ def user_list():
         return "<h1> 当前用户无权限查看该页面</h1>"
 
 
-# 添加一个新用户
+
 # only admin can operate other users information
 @app.route('/settings/user/add', methods=['POST', 'GET'])
 def add_user():
-    username = request.cookies.get('username')
-    if username == 'admin':
+    # user_id = request.cookies.get('user_id')
+    user_id = session.get('user_id')
+    user = User.query.get(int(user_id))
+    if user.name == 'admin':
         if request.method == 'POST':
             userdata = request.form.to_dict()
-            if userdata['password'] == userdata['password1']:
-                del userdata['password1']
-                print userdata
-                for i in userdata:
-                    userdata[i] = userdata[i].encode('utf-8')
-                user.save(userdata)
+            new_user = User(name=userdata['name'], password=userdata['password'], email=userdata['email'])
+            db.session.add(new_user)
+            try:
+                db.session.commit()
+            except:
+                db.session.rollback()
                 print "add user OK : ", userdata
-                usersdata = user.load()
-                return flask.redirect(flask.url_for('settings/user/list'))
-                # FIXME 添加成功后，进入 user_list 页面，查看资料
-            else:
-                return render_template('user_add.html', tips="<h1>输入密码前后不一致，请重新设置</h1>")
-        return render_template('user_add.html')
-    # return flask.redirect(flask.url_for('login'))
-    return "<h1> 当前用户无权限查看该页面</h1>"
 
+        users = User.query.all()
+        return flask.redirect(flask.url_for('settings/user/list', users=users))
+    else:
+        return "<h1> 当前用户无权限查看该页面</h1>"
 
-# /user/list
-# 显示所有用户，以 table 的形式，带有 th 标签（表格头）
-# 这个页面每个 条目 的最右边有一个 edit 超链接，点击跳转到 edit 页面
-
-
-
-'''
-/user/edit/<id>
-    编辑这个用户的资料（就是密码和 email 可以编辑）
-    这个页面由 list 页面跳转而来，id不存在（如果手动输入一个不存在的id）就404
-    成功后跳转到 list 页面
-    失败后停留在这个页面
-'''
 
 
 @app.route('/settings/user/edit/<id>', methods=['POST', 'GET'])
 def edit_user(id):
     user_id = session.get('user_id')
-    user = User.query.get(int(user_id))
     # user_id=request.cookies.get('user_id')
-    if user.name == 'admin':
-        if request.method == 'POST':
-            user_data = request.form.to_dict()
-            # user.update(id, user_data) FIXME
-            update_user = User()
-            users_data = user.load()
+    if user_id:
+        user = User.query.get(int(user_id))
+        if user.name == 'admin':
+            if request.method == 'POST':
+                user_data = request.form.to_dict()
+                print user_data
+                for k, v in user_data.items():
+                    user.k = v
+                # user.update(id, user_data) FIXME
+                db.session.add(user)
+                try:
+                    db.session.commit()
+                except:
+                    db.session.rollback()
 
-            return render_template('user_list.html', user_id=id, users_info=users_data, default_info=default_user)
-        return render_template('user_edit.html', user_id=id)
+                users = User.query.all()
+                response = make_response(url_for('user_list', users=users))
+                return url_for('user_list', users=users)
+            return render_template('user_edit.html', user_id=id, user=user)
     else:
         return "<h1> 当前用户无权限查看该页面</h1>"
-
-
-'''
-/user/delete/<id>
-    删除这个用户
-    成功后跳转到 list 页面
-    失败后也跳转到 list 页面（一般不会失败，所以先不管）
-#  绝对黑魔法
-'''
 
 
 @app.route('/settings/user/delete/<id>', methods=['POST', 'GET'])
 def delete_user(id):
-    username = request.cookies.get('username')
-    if username == 'admin':
-        print 'delete user data : ', user.search_id(id)
-        user.delete(id)
-        return render_template('user_list.html')
+    user_id = session.get('user_id')
+    # user_id = request.cookies.get('user_id')
+    user = User.query.get(int(user_id))
+    if user.name == 'admin':
+        ur = User.query.get(int(id))
+        db.session.delete(ur)
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+
+        print 'delete user data : ', ur
+        users = User.query.all()
+        response = make_response(url_for('user_list', users=users))
+        return response
     else:
-        return "<h1> 当前用户无权限查看该页面</h1>"
+        return "<h2> 当前用户无权限查看该页面</h2>"
+        # fixme error html
 
 
 '''

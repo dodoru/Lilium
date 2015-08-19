@@ -32,8 +32,8 @@
         <td>{{ user.password }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.timestamp }}</td>
-        <td><a href="/settings/user/edit/{{ (user[0]) }}">edit</a></td>
-        <td><a href="/settings/user/delete/{{ (user[0]) }}">delete</a></td>
+        <td><a href="/settings/user/edit/{{ user.id }}">edit</a></td>
+        <td><a href="/settings/user/delete/{{ user.id }}">delete</a></td>
     </tr>
 
     {% endfor %}
