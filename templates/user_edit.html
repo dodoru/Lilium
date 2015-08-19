@@ -1,0 +1,36 @@
+<!doctype html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>编辑用户资料</title>
+</head>
+<body>
+<!-- view -->
+{% if tips %}
+<h1>{{ h1 }}</h1>
+{% else %}
+<h1> 编辑用户(编号： {{ user_id }} ) </h1>
+{% endif %}
+<hr>
+
+<!-- add -->
+<form action='/settings/user/edit/{{ user_id }}' method="post">
+    <label for="username">用户名</label>
+    <input id="username" type="text" name="username" placeholder="{{ default_info }}">
+    <br>
+    <br>
+    <label for="password">密码</label>
+    <input id="password" type="password" name="password" placeholder="{{ default_info }}">
+    <br>
+    <br>
+    <label for="email">邮箱</label>
+    <input id="email" type="email" name="email" placeholder="{{ default_info }}">
+    <br>
+    <br>
+
+    <button type="submit">post</button>
+</form>
+</body>
+
+</html>

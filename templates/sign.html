@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} sign {% endblock %}
+
+{% block headers %}
+{% if username %}
+<a href="./">主页</a>
+<a href="./problems">题库</a>
+<a href="./settings/{{ username }}">设置</a>
+<a href="./login">退出</a>
+{% else %}
+<a href="./">目录</a>
+<a href="./login">登录</a>
+<a href="./sign"><strong>注册</strong></a>
+<a href="./retrieve_password">找回密码</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<form action="/sign" method="post">
+    <label for="username">用户名</label>
+    <input id="username" type="text" name="name">
+    <br>
+    <br>
+    <label for="email">注册邮箱</label>
+    <input id="email" type="text" name="email">
+    <br>
+    <br>
+    <label for="password1">密&nbsp&nbsp&nbsp&nbsp码</label>
+    <input id="password1" type="password" name="password1">
+    <br>
+    <br>
+    <!--
+    <label for="password2">再输密码</label>
+    <input id="password2" type="password" name="password2">
+    -->
+    <label for="password">再输密码</label>
+    <input id="password" type="password" name="password">
+    <br>
+    <br>
+    <button type="submit">确定</button>
+
+    <!--
+    <script type="text/javascript">
+        <!--
+            if submit: // 如果按了确定键 （怎样写？？？）
+                if password1==password2:// 这里要怎样对比 两次密码好呢？
+                    // 填空？？？
+    </script>
+        //-->
+
+</form>
+
+{% endblock %}

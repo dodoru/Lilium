@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 设置 {% endblock %}
+
+{% block headers %}
+{% if username %}
+<a href="./">主页</a>
+<a href="./problems">题库</a>
+<a href="./settings/{{ username }}"><strong>设置</strong></a>
+<a href="./login">退出</a>
+{% else %}
+<a href="./">目录</a>
+<a href="./login">登录</a>
+<a href="./sign"><strong>注册</strong></a>
+<a href="./retrieve_password">找回密码</a>
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+{% if username == 'admin' %}
+<a href="./user/list">用户列表</a>
+<a href="./user/add">增加用户</a>
+{% else %}
+
+{% endif %}
+
+<hr>
+<form action={{ action_url }} method="post">
+    <h1>(●'◡'●) 经常修改密码，可以提高账户的安全性哟~ </h1>
+    <hr>
+    <br>
+    <label for="password">更改密码</label>
+    <input id="password" type="password" name="password">
+    <br>
+    <br>
+    <label for="password1">再输密码</label>
+    <input id="password1" type="password" name="password1">
+    <br>
+    <br>
+    <button type="submit">确定</button>
+</form>
+
+{% endblock %}

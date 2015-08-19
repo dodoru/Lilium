@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户列表</title>
+</head>
+
+<body>
+<!-- view -->
+<h1> 摸着你的良心，不要干坏事 </h1>
+<hr>
+
+<table>
+    <!-- title -->
+    <!-- contents -->
+    {% if users %}
+    <tr>
+        <th>ID</th>
+        <th>username</th>
+        <th>password</th>
+        <th>email</th>
+        <th>timestamp</th>
+        <th>编辑</th>
+        <th>删除</th>
+
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.password }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.timestamp }}</td>
+        <td><a href="/settings/user/edit/{{ (user[0]) }}">edit</a></td>
+        <td><a href="/settings/user/delete/{{ (user[0]) }}">delete</a></td>
+    </tr>
+
+    {% endfor %}
+    {% endif %}
+
+</table>
+
+<!--  add
+<form action="/problems_list" method="post">
+    <label for="problem_title">题目</label>
+    <input id="problem_title" type="text" size="50" name="title" required="required">
+    <br>
+    <br>
+    <label for="problem_detail">题目描述</label>
+    <br>
+    <textarea id="problem_detail" name="detail" cols="80" rows="10"></textarea>
+    <br>
+    <label for="problem_creator">发布者</label>
+    <input id="problem_creator" name="creator">
+    <br>
+
+    <button type="submit">post</button>
+</form>
+-->
+</body>
+
+</html>

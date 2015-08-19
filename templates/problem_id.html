@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %} 第 {{ problem.id }} 题 {% endblock %}
+
+{% block headers %}
+{% if username %}
+<a href="./">主页</a>
+<a href="./problems"><strong>题库</strong></a>
+<a href="./settings/{{ username }}">设置</a>
+<a href="./login">退出</a>
+{% else %}
+<a href="./">目录</a>
+<a href="./login">登录</a>
+<a href="./sign">注册</a>
+<a href="./retrieve_password">找回密码</a>
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+<body>
+<!-- view -->
+<h1>{{ problem.title }} </h1>
+<br>
+<h4> 题主：{{ problem.creator }}</h4>
+<br>
+<article>{{ problem.detail }} :</article>
+<br>
+<br>
+<hr color="111">
+
+{% if solutions %}
+{% for solution in solutions %}
+<p>{{ solution.candidate }}</p>
+<article>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ solution.detail }}</article>
+<hr>
+{% endfor %}
+{% endif %}
+
+<h3> come on,baby ♥ ~ create your solution </h3>
+<br>
+
+<!-- add -->
+<form action="/problems/{{ problem.id }}" method="post">
+    <h5> {{ username }} </h5>
+    <br>
+    <br>
+    <label for="solution_detail">答案</label>
+    <br>
+    <textarea id="solution_detail" name="detail" cols="80" rows="10"></textarea>
+    <br>
+    <br>
+    <button type="submit">提交</button>
+</form>
+</body>
+
+{% endblock %}

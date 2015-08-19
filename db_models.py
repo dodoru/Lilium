@@ -7,7 +7,7 @@ from sqlalchemy import sql
 app = Flask(__name__)
 app.secret_key = 'secret database key'
 app.debug = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db_files/lilium.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db_files/db_models.db'
 db = SQLAlchemy(app)
 
 
