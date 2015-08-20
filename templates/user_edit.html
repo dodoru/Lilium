@@ -1,36 +1,42 @@
-<!doctype html>
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>编辑用户资料</title>
-</head>
-<body>
-<!-- view -->
-{% if tips %}
-<h1>{{ h1 }}</h1>
+{% block title %} 编辑用户( {{ user }}  {% endblock %}
+
+<!--
+{% block headers %}
+{% if username %}
+<a href="./">主页</a>
+<a href="./problems">题库</a>
+<a href="./settings/{{ username }}">设置</a>
+<a href="./login">退出</a>
 {% else %}
-<h1> 编辑用户(编号： {{ user_id }} ) </h1>
+<a href="./">目录</a>
+<a href="./login"><strong>登录</strong></a>
+<a href="./sign">注册</a>
+<a href="./retrieve_password">找回密码</a>
 {% endif %}
-<hr>
+{% endblock %}
+-->
+{% block content %}
+
 
 <!-- add -->
 <form action='/settings/user/edit/{{ user_id }}' method="post">
     <label for="username">用户名</label>
-    <input id="username" type="text" name="username" placeholder="{{ default_info }}">
+    <input id="username" type="text" name="name" placeholder="{{ user.name }}">
     <br>
     <br>
     <label for="password">密码</label>
-    <input id="password" type="password" name="password" placeholder="{{ default_info }}">
+    <input id="password" type="password" name="password" placeholder="{{ user.password }}">
     <br>
     <br>
     <label for="email">邮箱</label>
-    <input id="email" type="email" name="email" placeholder="{{ default_info }}">
+    <input id="email" type="email" name="email" placeholder="{{ user.email }}">
     <br>
     <br>
 
     <button type="submit">post</button>
 </form>
-</body>
 
-</html>
+{% endblock %}

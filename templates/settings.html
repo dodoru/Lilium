@@ -4,7 +4,7 @@
 {% block title %} 设置 {% endblock %}
 
 {% block headers %}
-{% if username %}
+{% if user_id %}
 <a href="./">主页</a>
 <a href="./problems">题库</a>
 <a href="./settings/{{ username }}"><strong>设置</strong></a>
@@ -19,7 +19,9 @@
 
 
 {% block content %}
-{% if username == 'admin' %}
+<div class="content">
+    {% if user_id < 3 %}
+    <!-- 默认 user_id<3 为管理员用户，可以查看列表 -->
 <a href="./user/list">用户列表</a>
 <a href="./user/add">增加用户</a>
 {% else %}
@@ -27,9 +29,7 @@
 {% endif %}
 
 <hr>
-<form action={{ action_url }} method="post">
-    <h1>(●'◡'●) 经常修改密码，可以提高账户的安全性哟~ </h1>
-    <hr>
+    <form action="/settings/{{ user_id }}" method="post">
     <br>
     <label for="password">更改密码</label>
     <input id="password" type="password" name="password">
@@ -41,5 +41,5 @@
     <br>
     <button type="submit">确定</button>
 </form>
-
+</div>
 {% endblock %}

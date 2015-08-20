@@ -16,11 +16,12 @@ app.config.from_object(__name__)
 
 @app.route('/')
 def index():
-    name = request.cookies.get('username')
+    # user_id = request.cookies.get('user_id')
     user_id = session.get('user_id')
+    # user=User.query.get(int(user_id))
     # Fixme
     print request.cookies, session
-    return render_template('index.html', username=name)
+    return render_template('index.html', user_id=user_id)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -86,12 +87,12 @@ def retrieve_password():
     return render_template('retrieve_password.html')
 
 
-@app.route('/settings/<name>', methods=['POST', 'GET'])
-def settings(name):
+@app.route('/settings/<id>', methods=['POST', 'GET'])
+def settings(id):
     # user_id = request.cookies.get('user_id')
     user_id = session.get('user_id')
-    user = User.query.get(int(user_id))
-    if user.name == name:
+    if id == user_id:
+        user = User.query.get(int(user_id))
         url = '/settings/' + str(name)
         if request.method == 'POST':
             user_password = request.form.to_dict()
@@ -101,7 +102,7 @@ def settings(name):
                 db.session.commit()
                 flash('you have reset your password .')
                 return '<h2> you have reset your password .</h2> '
-        return render_template('settings.html', username=name, action_url=url)
+        return render_template('settings.html', user_id=user_id, action_url=url)
     else:
         return redirect(url_for('login'))
         # 必须是当前用户才可以修改密码,如果不是就要重新登陆
@@ -129,7 +130,7 @@ def problems():
             except:
                 db.session.rollback()
     problems_data = Problem.query.all()
-    return render_template('problems_list.html', problems=problems_data, username=user.name)
+    return render_template('problems_list.html', problems=problems_data, user_id=user_id)
 
 
 @app.route('/problems/<problem_id>', methods=['POST', 'GET'])
@@ -161,9 +162,10 @@ def user_list():
     user_id = session.get('user_id')
     user = User.query.get(int(user_id))
     # username = request.cookies.get('username')
-    if user.name == 'admin':
+    # if user.name == 'admin':
+    if user_id < 3:  # default setting user is admin  while user.id<3
         users = User.query.all()
-        return render_template('user_list.html', users=users)
+        return render_template('user_list.html', user_id=user_id, users=users)
     else:
         return "<h1> 当前用户无权限查看该页面</h1>"
 
@@ -187,7 +189,7 @@ def add_user():
                 print "add user OK : ", userdata
 
         users = User.query.all()
-        return flask.redirect(flask.url_for('settings/user/list', users=users))
+        return flask.redirect(flask.url_for('user_list', users=users, user_id=user_id))
     else:
         return "<h1> 当前用户无权限查看该页面</h1>"
 
@@ -210,11 +212,13 @@ def edit_user(id):
                 try:
                     db.session.commit()
                 except:
+                    flash("error!")
+                    print user
                     db.session.rollback()
 
                 users = User.query.all()
-                response = make_response(url_for('user_list', users=users))
-                return url_for('user_list', users=users)
+                response = make_response(redirect(url_for('user_list', users=users, user_id=user_id)))
+                return response
             return render_template('user_edit.html', user_id=id, user=user)
     else:
         return "<h1> 当前用户无权限查看该页面</h1>"
@@ -235,7 +239,7 @@ def delete_user(id):
 
         print 'delete user data : ', ur
         users = User.query.all()
-        response = make_response(url_for('user_list', users=users))
+        response = make_response(url_for('user_list', users=users, user_id=user_id))
         return response
     else:
         return "<h2> 当前用户无权限查看该页面</h2>"

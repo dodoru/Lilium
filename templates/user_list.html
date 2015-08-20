@@ -1,30 +1,46 @@
-<!doctype html>
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>用户列表</title>
-</head>
+{% block title %}用户列表{% endblock %}
 
-<body>
-<!-- view -->
-<h1> 摸着你的良心，不要干坏事 </h1>
-<hr>
+{% block headers %}
+{% if user_id %}
+<a href="./">主页</a>
+<a href="./problems">题库</a>
+<a href="./settings/{{ user_id }}">设置</a>
+<a href="./login">退出</a>
+{% else %}
+<a href="./">目录</a>
+<a href="./login"><strong>登录</strong></a>
+<a href="./sign">注册</a>
+<a href="./retrieve_password">找回密码</a>
+{% endif %}
+{% endblock %}
 
-<table>
+{% block content %}
+<div class="content" align="center">
+    <form action={{url_for("add_user")}} method="post">
+        <input type="text" placeholder="username" name="name">
+        <input type="text" placeholder="password" name="password">
+        <input type="text" placeholder="email" name="email">
+        <input class="pure-button pure-button-primary" type="submit" value="Add">
+    </form>
+
+    <hr>
+
+    <table>
     <!-- title -->
-    <!-- contents -->
-    {% if users %}
     <tr>
-        <th>ID</th>
-        <th>username</th>
-        <th>password</th>
-        <th>email</th>
-        <th>timestamp</th>
-        <th>编辑</th>
-        <th>删除</th>
-
+        <th width="20px">ID</th>
+        <th width="50px">name</th>
+        <th width="80px">password</th>
+        <th width="150px">email</th>
+        <th width="150px">timestamp</th>
+        <th width="50px">编辑</th>
+        <th width="50px">删除</th>
     </tr>
+        <!-- contents -->
+        {% if users %}
     {% for user in users %}
     <tr>
         <td>{{ user.id }}</td>
@@ -40,24 +56,5 @@
     {% endif %}
 
 </table>
-
-<!--  add
-<form action="/problems_list" method="post">
-    <label for="problem_title">题目</label>
-    <input id="problem_title" type="text" size="50" name="title" required="required">
-    <br>
-    <br>
-    <label for="problem_detail">题目描述</label>
-    <br>
-    <textarea id="problem_detail" name="detail" cols="80" rows="10"></textarea>
-    <br>
-    <label for="problem_creator">发布者</label>
-    <input id="problem_creator" name="creator">
-    <br>
-
-    <button type="submit">post</button>
-</form>
--->
-</body>
-
-</html>
+</div>
+{% endblock %}

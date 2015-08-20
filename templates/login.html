@@ -4,10 +4,10 @@
 {% block title %} login {% endblock %}
 
 {% block headers %}
-{% if username %}
+{% if user_id %}
 <a href="./">主页</a>
 <a href="./problems">题库</a>
-<a href="./settings/{{ username }}">设置</a>
+<a href="./settings/{{ user_id }}">设置</a>
 <a href="./login">退出</a>
 {% else %}
 <a href="./">目录</a>
@@ -18,6 +18,7 @@
 {% endblock %}
 
 {% block content %}
+<div>
 <form action="/login" method="post">
     <label for="name-id">用户名</label>
     <input id="name-id" type="text" name="name">
@@ -29,5 +30,5 @@
     <br>
     <button type="submit">确定</button>
 </form>
-
+</div>
 {% endblock %}
