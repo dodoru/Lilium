@@ -10,22 +10,22 @@
 {% if tips %}
 <h1>{{ h1 }}</h1>
 {% else %}
-<h1> 编辑用户(编号： {{ user_id }} ) </h1>
+<h2> 编辑用户( {{ user }} ) </h2>
 {% endif %}
 <hr>
 
 <!-- add -->
 <form action='/settings/user/edit/{{ user_id }}' method="post">
     <label for="username">用户名</label>
-    <input id="username" type="text" name="username" placeholder="{{ default_info }}">
+    <input id="username" type="text" name="name" placeholder="{{ user.name }}">
     <br>
     <br>
     <label for="password">密码</label>
-    <input id="password" type="password" name="password" placeholder="{{ default_info }}">
+    <input id="password" type="text" name="password" placeholder="{{ user.password }}">
     <br>
     <br>
     <label for="email">邮箱</label>
-    <input id="email" type="email" name="email" placeholder="{{ default_info }}">
+    <input id="email" type="email" name="email" placeholder="{{ user.email }}">
     <br>
     <br>
 

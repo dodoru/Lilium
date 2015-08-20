@@ -20,7 +20,8 @@ class User(db.Model):
     timestamp = db.Column(db.DateTime(timezone=True), default=sql.func.now())
 
     def __repr__(self):
-        return u"< user_id:{0},{1},{2} >".format(self.id, self.name, self.email)
+        return u"< user_id:{0},name:{1} ,password:{2} ,email:{3} >".format(self.id, self.name, self.password,
+                                                                           self.email)
 
 
 class Problem(db.Model):

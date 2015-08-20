@@ -1,63 +1,70 @@
-<!doctype html>
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>用户列表</title>
-</head>
+{% block title %} index {% endblock %}
 
-<body>
-<!-- view -->
-<h1> 摸着你的良心，不要干坏事 </h1>
-<hr>
+{% block headers %}
+{% if username %}
+<a href="./">主页</a>
+<a href="./problems">题库</a>
+<a href="./settings/{{ username }}">设置</a>
+<a href="./login">退出</a>
+{% else %}
+<a href="./">目录</a>
+<a href="./login">登录</a>
+<a href="./sign">注册</a>
+<a href="./retrieve_password">找回密码</a>
+{% endif %}
+{% endblock %}
 
-<table>
-    <!-- title -->
-    <!-- contents -->
-    {% if users %}
-    <tr>
-        <th>ID</th>
-        <th>username</th>
-        <th>password</th>
-        <th>email</th>
-        <th>timestamp</th>
-        <th>编辑</th>
-        <th>删除</th>
+{% block content %}
 
-    </tr>
-    {% for user in users %}
-    <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.password }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.timestamp }}</td>
-        <td><a href="/settings/user/edit/{{ user.id }}">edit</a></td>
-        <td><a href="/settings/user/delete/{{ user.id }}">delete</a></td>
-    </tr>
+<div class="content" align="center">
+    <!-- add -->
+    <form action={{url_for("add_user")}} method="post">
+        <label for="username">username</label>
+        <input id="username" type="text" name="name" required="required">
+        <label for="password">password</label>
+        <input id="password" type="text" name="password" required="required">
+        <label for="email">email</label>
+        <input id="email" type="email" name="email">
 
-    {% endfor %}
-    {% endif %}
+        <button type="submit">add</button>
+    </form>
 
-</table>
 
-<!--  add
-<form action="/problems_list" method="post">
-    <label for="problem_title">题目</label>
-    <input id="problem_title" type="text" size="50" name="title" required="required">
-    <br>
-    <br>
-    <label for="problem_detail">题目描述</label>
-    <br>
-    <textarea id="problem_detail" name="detail" cols="80" rows="10"></textarea>
-    <br>
-    <label for="problem_creator">发布者</label>
-    <input id="problem_creator" name="creator">
-    <br>
+    <table>
 
-    <button type="submit">post</button>
-</form>
--->
-</body>
+        <!-- title -->
+        <!-- contents -->
+        {% if users %}
+        <tr>
+            <th>ID</th>
+            <th>username</th>
+            <th>password</th>
+            <th>email</th>
+            <th>timestamp</th>
+            <th>edit</th>
+            <th>delete</th>
 
-</html>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.password }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.timestamp }}</td>
+            <td><a href="/settings/user/edit/{{ user.id }}">edit</a></td>
+            <td><a href="/settings/user/delete/{{ user.id }}">delete</a></td>
+        </tr>
+
+        {% endfor %}
+        {% endif %}
+
+    </table>
+
+</div>
+
+
+{% endblock %}

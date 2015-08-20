@@ -168,7 +168,6 @@ def user_list():
         return "<h1> 当前用户无权限查看该页面</h1>"
 
 
-
 # only admin can operate other users information
 @app.route('/settings/user/add', methods=['POST', 'GET'])
 def add_user():
@@ -187,35 +186,39 @@ def add_user():
                 print "add user OK : ", userdata
 
         users = User.query.all()
-        return flask.redirect(flask.url_for('settings/user/list', users=users))
+        response = make_response(redirect(url_for('user_list', users=users)))
+        return response
     else:
         return "<h1> 当前用户无权限查看该页面</h1>"
-
 
 
 @app.route('/settings/user/edit/<id>', methods=['POST', 'GET'])
 def edit_user(id):
     user_id = session.get('user_id')
     # user_id=request.cookies.get('user_id')
+    target_user = User.query.get(int(id))
     if user_id:
         user = User.query.get(int(user_id))
         if user.name == 'admin':
             if request.method == 'POST':
                 user_data = request.form.to_dict()
                 print user_data
-                for k, v in user_data.items():
-                    user.k = v
+                for k, v in user_data.items():  # 按照表格的字典更新用户数据
+                    target_user.k = v
+                    print target_user, target_user.k
                 # user.update(id, user_data) FIXME
-                db.session.add(user)
+                # db.session.add(target_user)
                 try:
                     db.session.commit()
+                    print target_user
                 except:
                     db.session.rollback()
+                    print "rollback()"
 
                 users = User.query.all()
-                response = make_response(url_for('user_list', users=users))
-                return url_for('user_list', users=users)
-            return render_template('user_edit.html', user_id=id, user=user)
+                response = make_response(redirect(url_for('user_list', users=users)))
+                return response
+            return render_template('user_edit.html', user_id=id, user=target_user)
     else:
         return "<h1> 当前用户无权限查看该页面</h1>"
 
@@ -235,7 +238,7 @@ def delete_user(id):
 
         print 'delete user data : ', ur
         users = User.query.all()
-        response = make_response(url_for('user_list', users=users))
+        response = make_response(redirect(url_for('user_list', users=users)))
         return response
     else:
         return "<h2> 当前用户无权限查看该页面</h2>"
@@ -243,7 +246,7 @@ def delete_user(id):
 
 
 '''
-@app.errolhandler(404)
+@app.errorhandler(404)
 def page_not_found():
     return "<h1>page not found</h1>",404
 '''

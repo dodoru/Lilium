@@ -1,23 +1,26 @@
-<!doctype html>
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>ADD USER</title>
-    <style type="text/css">
-        form{
-        text-align:center;
-        }
-    </style>
-</head>
+{% block title %} edit_user {% endblock %}
 
-<body>
-<!-- add -->
-<h1> 增加用户 </h1>
-<hr>
+{% block headers %}
+{% if username %}
+<a href="./">主页</a>
+<a href="./problems">题库</a>
+<a href="./settings/{{ username }}">设置</a>
+<a href="./login">退出</a>
+{% else %}
+<a href="./">目录</a>
+<a href="./login">登录</a>
+<a href="./sign">注册</a>
+<a href="./retrieve_password">找回密码</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
 <form action="/settings/user/add" method="post">
     <label for="username">用户名</label>
-    <input id="username" type="text" name="username">
+    <input id="username" type="text" name="name">
     <br>
     <br>
     <label for="email">注册邮箱</label>
