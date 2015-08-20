@@ -8,7 +8,7 @@
 <a href={{url_for("index")}}><strong>主页</strong></a>
 <a href={{url_for("problems")}}>题库</a>
 <a href={{url_for("settings",name=username)}}>设置</a>
-<a href={{url_for("index")}}"/login">退出</a>
+<a href={{url_for("login")}}>退出</a>
 {% else %}
 <a href={{url_for("index")}}>主页</a>
 <a href={{url_for("login")}}>登录</a>

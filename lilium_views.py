@@ -16,11 +16,13 @@ app.config.from_object(__name__)
 
 @app.route('/')
 def index():
-    name = request.cookies.get('username')
+    user = None
     user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(int(user_id))
     # Fixme
     print request.cookies, session
-    return render_template('index.html', username=name)
+    return render_template('index.html', username=user.name)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -79,8 +81,8 @@ def retrieve_password():
         user = User.query.filter(User.name == user_data['name'], User.email == user_data['email']).first()
         print user
         if user:
-            flash("(●'◡'●),已经将密码发到你注册的邮箱，请查收验证。")
-            # fixme
+            return "<h1>(●'◡'●),已经将密码发到你注册的邮箱，请查收验证。</h1>"
+            # fixme ,send email
         else:
             flash("咦？ 这个邮箱还没有注册耶~ .../n  (●'◡'●) come on ，baby  ❤ ~ ")
     return render_template('retrieve_password.html')
@@ -204,11 +206,16 @@ def edit_user(id):
             if request.method == 'POST':
                 user_data = request.form.to_dict()
                 print user_data
-                for k, v in user_data.items():  # 按照表格的字典更新用户数据
+                ''' # 按照表格的字典更新用户数据 ,无效更改 Fixme
+                for k, v in user_data.items():
                     target_user.k = v
                     print target_user, target_user.k
-                # user.update(id, user_data) FIXME
-                # db.session.add(target_user)
+                '''
+                target_user.name = user_data['name']
+                target_user.email = user_data['email']
+                target_user.password = user_data['password']
+                db.session.add(target_user)
+
                 try:
                     db.session.commit()
                     print target_user
