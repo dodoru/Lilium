@@ -163,7 +163,7 @@ def user_list():
     # username = request.cookies.get('username')
     if user.name == 'admin':
         users = User.query.all()
-        return render_template('user_list.html', users=users)
+        return render_template('user_list.html', username=user.name, users=users)
     else:
         return "<h1> 当前用户无权限查看该页面</h1>"
 
@@ -186,7 +186,7 @@ def add_user():
                 print "add user OK : ", userdata
 
         users = User.query.all()
-        response = make_response(redirect(url_for('user_list', users=users)))
+        response = make_response(redirect(url_for('user_list', username=user.name, users=users)))
         return response
     else:
         return "<h1> 当前用户无权限查看该页面</h1>"
@@ -197,6 +197,7 @@ def edit_user(id):
     user_id = session.get('user_id')
     # user_id=request.cookies.get('user_id')
     target_user = User.query.get(int(id))
+
     if user_id:
         user = User.query.get(int(user_id))
         if user.name == 'admin':
@@ -216,9 +217,9 @@ def edit_user(id):
                     print "rollback()"
 
                 users = User.query.all()
-                response = make_response(redirect(url_for('user_list', users=users)))
+                response = make_response(redirect(url_for('user_list', username=user.name, users=users)))
                 return response
-            return render_template('user_edit.html', user_id=id, user=target_user)
+            return render_template('user_edit.html', username=user.name, target_user=target_user)
     else:
         return "<h1> 当前用户无权限查看该页面</h1>"
 

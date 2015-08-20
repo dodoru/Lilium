@@ -1,3 +1,4 @@
+
 {% extends "layout.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
@@ -17,6 +18,22 @@
 {% endif %}
 {% endblock %}
 
+<!--
+{% block headers %}
+{% if username %}
+<a href="/">主页</a>
+<a href="/problems">题库</a>
+<a href="/settings/{{ username }}">设置</a>
+<a href="/login">退出</a>
+{% else %}
+<a href="/">目录</a>
+<a href="/login">登录</a>
+<a href="/sign">注册</a>
+<a href="/retrieve_password">找回密码</a>
+{% endif %}
+{% endblock %}
+
+-->
 {% block content %}
 <form action="/settings/user/add" method="post">
     <label for="username">用户名</label>
@@ -56,3 +73,4 @@
 </body>
 
 </html>
+

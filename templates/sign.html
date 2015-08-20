@@ -5,15 +5,15 @@
 
 {% block headers %}
 {% if username %}
-<a href="./">主页</a>
-<a href="./problems">题库</a>
-<a href="./settings/{{ username }}">设置</a>
-<a href="./login">退出</a>
+<a href={{url_for("index")}}>主页</a>
+<a href={{url_for("problems")}}>题库</a>
+<a href={{url_for("settings",name=username)}}>设置</a>
+<a href={{url_for("index")}}"/login">退出</a>
 {% else %}
-<a href="./">目录</a>
-<a href="./login">登录</a>
-<a href="./sign"><strong>注册</strong></a>
-<a href="./retrieve_password">找回密码</a>
+<a href={{url_for("index")}}>主页</a>
+<a href={{url_for("login")}}>登录</a>
+<a href={{url_for("sign")}}>注册</a>
+<a href={{url_for("retrieve_password")}}>找回密码</a>
 {% endif %}
 {% endblock %}
 
