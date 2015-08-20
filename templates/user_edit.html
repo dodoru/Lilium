@@ -1,18 +1,26 @@
-<!doctype html>
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<meta charset="utf-8">
+{% block title %} edit_user {% endblock %}
 
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>编辑用户资料</title>
-</head>
-<body>
-<!-- view -->
-{% if tips %}
-<h1>{{ h1 }}</h1>
+{% block headers %}
+{% if username %}
+<a href="./">主页</a>
+<a href="./problems">题库</a>
+<a href="./settings/{{ username }}">设置</a>
+<a href="./login">退出</a>
 {% else %}
-<h2> 编辑用户( {{ user }} ) </h2>
+<a href="./">目录</a>
+<a href="./login">登录</a>
+<a href="./sign">注册</a>
+<a href="./retrieve_password">找回密码</a>
 {% endif %}
-<hr>
+{% endblock %}
+
+{% block content %}
+
+
+<h2> 修改用户资料 {{ user }} </h2>
 
 <!-- add -->
 <form action='/settings/user/edit/{{ user_id }}' method="post">
@@ -31,6 +39,5 @@
 
     <button type="submit">post</button>
 </form>
-</body>
 
-</html>
+{% endblock %}
