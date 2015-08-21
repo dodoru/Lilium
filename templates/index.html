@@ -4,20 +4,18 @@
 {% block title %} index {% endblock %}
 
 {% block headers %}
-super()
-{% if user_id %}
-<a href="./">主页</a>
-<a href="./problems">题库</a>
-<a href="./settings/{{ user_id }}">设置</a>
-<a href="./login">退出</a>
+{% if username %}
+<a href={{url_for("index")}}><strong>主页</strong></a>
+<a href={{url_for("problems")}}>题库</a>
+<a href={{url_for("settings",name=username)}}>设置</a>
+<a href={{url_for("login")}}>退出</a>
 {% else %}
-<a href="./"><strong>目录</strong></a>
-<a href="./login">登录</a>
-<a href="./sign">注册</a>
-<a href="./retrieve_password">找回密码</a>
+<a href={{url_for("index")}}>主页</a>
+<a href={{url_for("login")}}>登录</a>
+<a href={{url_for("sign")}}>注册</a>
+<a href={{url_for("retrieve_password")}}>找回密码</a>
 {% endif %}
 {% endblock %}
-
 
 {% block content %}
 
@@ -25,7 +23,7 @@ super()
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;灵气大概早被污染，谁为了生活不变</p>
 <hr>
 
-{% if user %}
+{% if username %}
 <p> {{ username }} </p>
 <p> 这里应该放用户自己提的问题，和自己做的题目</p>
 

@@ -4,24 +4,22 @@
 {% block title %} 设置 {% endblock %}
 
 {% block headers %}
-{% if user_id %}
-<a href="./">主页</a>
-<a href="./problems">题库</a>
-<a href="./settings/{{ username }}"><strong>设置</strong></a>
-<a href="./login">退出</a>
+{% if username %}
+<a href={{url_for("index")}}>主页</a>
+<a href={{url_for("problems")}}>题库</a>
+<a href={{url_for("settings",name=username)}}>设置</a>
+<a href={{url_for("login")}}>退出</a>
 {% else %}
-<a href="./">目录</a>
-<a href="./login">登录</a>
-<a href="./sign"><strong>注册</strong></a>
-<a href="./retrieve_password">找回密码</a>
+<a href={{url_for("index")}}>主页</a>
+<a href={{url_for("login")}}>登录</a>
+<a href={{url_for("sign")}}>注册</a>
+<a href={{url_for("retrieve_password")}}>找回密码</a>
 {% endif %}
 {% endblock %}
 
 
 {% block content %}
-<div class="content">
-    {% if user_id < 3 %}
-    <!-- 默认 user_id<3 为管理员用户，可以查看列表 -->
+{% if username == 'admin' %}
 <a href="./user/list">用户列表</a>
 <a href="./user/add">增加用户</a>
 {% else %}
@@ -29,7 +27,9 @@
 {% endif %}
 
 <hr>
-    <form action="/settings/{{ user_id }}" method="post">
+<form action={{ action_url }} method="post">
+    <h5>(●'◡'●) 经常修改密码，可以提高账户的安全性哟~ </h5>
+    <hr>
     <br>
     <label for="password">更改密码</label>
     <input id="password" type="password" name="password">
@@ -41,5 +41,5 @@
     <br>
     <button type="submit">确定</button>
 </form>
-</div>
+
 {% endblock %}

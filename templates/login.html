@@ -4,21 +4,20 @@
 {% block title %} login {% endblock %}
 
 {% block headers %}
-{% if user_id %}
-<a href="./">主页</a>
-<a href="./problems">题库</a>
-<a href="./settings/{{ user_id }}">设置</a>
-<a href="./login">退出</a>
+{% if username %}
+<a href={{url_for("index")}}>主页</a>
+<a href={{url_for("problems")}}>题库</a>
+<a href={{url_for("settings",name=username)}}>设置</a>
+<a href={{url_for("login")}}>退出</a>
 {% else %}
-<a href="./">目录</a>
-<a href="./login"><strong>登录</strong></a>
-<a href="./sign">注册</a>
-<a href="./retrieve_password">找回密码</a>
+<a href={{url_for("index")}}>主页</a>
+<a href={{url_for("login")}}>登录</a>
+<a href={{url_for("sign")}}>注册</a>
+<a href={{url_for("retrieve_password")}}>找回密码</a>
 {% endif %}
 {% endblock %}
 
 {% block content %}
-<div>
 <form action="/login" method="post">
     <label for="name-id">用户名</label>
     <input id="name-id" type="text" name="name">
@@ -30,5 +29,5 @@
     <br>
     <button type="submit">确定</button>
 </form>
-</div>
+
 {% endblock %}

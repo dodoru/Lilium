@@ -1,60 +1,70 @@
 {% extends "layout.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}用户列表{% endblock %}
+{% block title %} user_list {% endblock %}
 
 {% block headers %}
-{% if user_id %}
-<a href="./">主页</a>
-<a href="./problems">题库</a>
-<a href="./settings/{{ user_id }}">设置</a>
-<a href="./login">退出</a>
+{% if username %}
+<a href={{url_for("index")}}>主页</a>
+<a href={{url_for("problems")}}>题库</a>
+<a href={{url_for("settings",name=username)}}>设置</a>
+<a href={{url_for("login")}}>退出</a>
 {% else %}
-<a href="./">目录</a>
-<a href="./login"><strong>登录</strong></a>
-<a href="./sign">注册</a>
-<a href="./retrieve_password">找回密码</a>
+<a href={{url_for("index")}}>主页</a>
+<a href={{url_for("login")}}>登录</a>
+<a href={{url_for("sign")}}>注册</a>
+<a href={{url_for("retrieve_password")}}>找回密码</a>
 {% endif %}
 {% endblock %}
 
 {% block content %}
+
 <div class="content" align="center">
+    <!-- add -->
     <form action={{url_for("add_user")}} method="post">
-        <input type="text" placeholder="username" name="name">
-        <input type="text" placeholder="password" name="password">
-        <input type="text" placeholder="email" name="email">
-        <input class="pure-button pure-button-primary" type="submit" value="Add">
+        <label for="username">username</label>
+        <input id="username" type="text" name="name" required="required">
+        <label for="password">password</label>
+        <input id="password" type="text" name="password" required="required">
+        <label for="email">email</label>
+        <input id="email" type="email" name="email">
+
+        <button type="submit">add</button>
     </form>
 
-    <hr>
 
     <table>
-    <!-- title -->
-    <tr>
-        <th width="20px">ID</th>
-        <th width="50px">name</th>
-        <th width="80px">password</th>
-        <th width="150px">email</th>
-        <th width="150px">timestamp</th>
-        <th width="50px">编辑</th>
-        <th width="50px">删除</th>
-    </tr>
+
+        <!-- title -->
         <!-- contents -->
         {% if users %}
-    {% for user in users %}
-    <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.password }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.timestamp }}</td>
-        <td><a href="/settings/user/edit/{{ user.id }}">edit</a></td>
-        <td><a href="/settings/user/delete/{{ user.id }}">delete</a></td>
-    </tr>
+        <tr>
+            <th>ID</th>
+            <th>username</th>
+            <th>password</th>
+            <th>email</th>
+            <th>timestamp</th>
+            <th>edit</th>
+            <th>delete</th>
 
-    {% endfor %}
-    {% endif %}
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.password }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.timestamp }}</td>
+            <td><a href="/settings/user/edit/{{ user.id }}">edit</a></td>
+            <td><a href="/settings/user/delete/{{ user.id }}">delete</a></td>
+        </tr>
 
-</table>
+        {% endfor %}
+        {% endif %}
+
+    </table>
+
 </div>
+
+
 {% endblock %}
