@@ -16,13 +16,13 @@ app.config.from_object(__name__)
 
 @app.route('/')
 def index():
-    user = None
+    name = None
     user_id = session.get('user_id')
     if user_id:
         user = User.query.get(int(user_id))
-    # Fixme
+        name = user.name
     print request.cookies, session
-    return render_template('index.html', username=user.name)
+    return render_template('index.html', username=name)
 
 
 @app.route('/login', methods=['POST', 'GET'])
