@@ -22,13 +22,12 @@ mail = Mail(app)
 # todo, 发送邮件找回密码
 # def send_email(to, subject, template, **kwargs):
 def send_email(to_email, body):
-    print to_email, body, app.config
     msg = Message(app.config['FLASK_MAIL_SUBJECT_PREFIX'], sender=app.config['FLASKY_MAIL_SENDER'],
                   recipients=[to_email])
     # msg.body=render_template(template+'.txt',**kwargs)
-    #msg.html=render_template(template+'.html',**kwargs)
+    # msg.html=render_template(template+'.html',**kwargs)
     msg.body = 'text body'
-    msg.html = '<br><h3>your password for Lilium is <b> ' + str(body) + '</b>  /h3>'
+    msg.html = '<br><h3>your password for Lilium is <b>  <u>' + str(body) + '</u> </b></h3>'
     with app.app_context():
         mail.send(msg)
 
