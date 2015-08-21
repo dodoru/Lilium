@@ -3,6 +3,7 @@ import flask
 from flask import Flask, request, session, render_template, redirect, url_for, flash, make_response
 from flask.ext.bootstrap import Bootstrap
 from db_models import User, Problem, Solution, db
+from send_email import send_email
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -82,8 +83,8 @@ def retrieve_password():
         user = User.query.filter(User.name == user_data['name'], User.email == user_data['email']).first()
         print user
         if user:
-            return "<h1>(●'◡'●),已经将密码发到你注册的邮箱，请查收验证。</h1>"
-            # fixme ,send email
+            send_email(str(user.email), user.password)
+            return "<h1>你好，{0},已经将密码发到你的邮箱 <b> {1} </b> 请查收验证。</h1>".format(user.name, user.email)
         else:
             flash("咦？ 这个邮箱还没有注册耶~ .../n  (●'◡'●) come on ，baby  ❤ ~ ")
     return render_template('retrieve_password.html')
@@ -258,10 +259,11 @@ def delete_user(id):
             return "<h2> 当前用户无权限查看该页面</h2>"
 
 
+'''
 @app.errorhandler(404)
 def page_not_found():
-    return "<h1>page not found</h1>",404
-
+    return "<h1>page not found</h1>", 404
+'''
 
 if __name__ == '__main__':
     app.debug = True
