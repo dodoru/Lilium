@@ -25,20 +25,3 @@
 + 1 管理员的账号是 admin ，可以考虑在用户角色db_Models.USER 那里加一个角色标签，表示用户是vip,管理员，普通用户等
 + 2 查看用户列表，可以修改，增加，删除其他用户。建议不要删掉自己。
 
----
-以下是简单的页面截图。
-
-+ 1 未登录的用户 主页
-![image](https://github.com/dodoru/Lilium/blob/master/images/index_unlog.jpg)
-
-+ 2 登陆后的用户 查看题库
-![image](https://github.com/dodoru/Lilium/blob/master/images/problems_list.jpg)
-
-+ 3 登陆后的普通用户-设置-修改密码页面
-![image](https://github.com/dodoru/Lilium/blob/master/images/settings.jpg)
-
-+ 4 登陆后的管理员-设置-比普通用户多一个可以查看用户列表的权限
-![image](https://github.com/dodoru/Lilium/blob/master/images/admin_settings.jpg)
-
-+ 5 登陆后的管理员-设置-用户列表-可以增加删除修改其他用户的信息
-![image](https://github.com/dodoru/Lilium/blob/master/images/admin_user_list.jpg)
