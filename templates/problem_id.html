@@ -36,23 +36,24 @@
 <article>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ solution.detail }}</article>
 <hr>
 {% endfor %}
-{% endif %}
+{% else %}
 
 <h3> come on,baby ♥ ~ create your solution </h3>
-<br>
 
-<!-- add -->
-<form action="/problems/{{ problem.id }}" method="post">
-    <h5> {{ username }} </h5>
-    <br>
-    <br>
-    <label for="solution_detail">答案</label>
-    <br>
-    <textarea id="solution_detail" name="detail" cols="80" rows="10"></textarea>
-    <br>
-    <br>
-    <button type="submit">提交</button>
-</form>
+{% endif %}
+
+<div>
+    <!-- add -->
+    <form action="/problems/{{ problem.id }}" method="post">
+
+        <label for="solution_detail">{{ username }} 的回答 </label>
+        <br>
+        <textarea id="solution_detail" name="detail" cols="80" rows="10"></textarea>
+        <br>
+        <br>
+        <button type="submit">提交</button>
+    </form>
+</div>
 </body>
 
 {% endblock %}

@@ -20,8 +20,7 @@ class User(db.Model):
     timestamp = db.Column(db.DateTime(timezone=True), default=sql.func.now())
 
     def __repr__(self):
-        return u"< user_id:{0},name:{1} ,password:{2} ,email:{3} >".format(self.id, self.name, self.password,
-                                                                           self.email)
+        return u"< {0} , {1} >".format(self.name, self.email)
 
 
 class Problem(db.Model):
@@ -40,7 +39,7 @@ class Problem(db.Model):
 class Solution(db.Model):
     __tablename__ = 'solutions'
     id = db.Column(db.Integer, primary_key=True)
-    detail = db.Column(db.String(1000))
+    detail = db.Column(db.String(1000), nullable=False)
     score = db.Column(db.Integer, default=0)
     candidate_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     candidate = db.relationship('User', backref='solutions')

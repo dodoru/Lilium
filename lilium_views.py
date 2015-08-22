@@ -17,13 +17,14 @@ app.config.from_object(__name__)
 
 @app.route('/')
 def index():
-    name = None
     user_id = session.get('user_id')
     if user_id:
         user = User.query.get(int(user_id))
-        name = user.name
-    print request.cookies, session
-    return render_template('index.html', username=name)
+        my_problems = Problem.query.filter(Problem.creator_id == int(user_id)).all()
+        my_solutions = Solution.query.filter(Solution.candidate_id == int(user_id)).group_by(Solution.problem_id)
+        return render_template('index.html', username=user.name, my_problems=my_problems, my_solutions=my_solutions)
+    else:
+        return render_template('index.html')
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -32,11 +33,11 @@ def login():
         session.__delitem__('user_id')
     if request.method == 'POST':
         userdata = request.form.to_dict()
-        user = User.query.filter(User.name == userdata['name']).first()
+        user = User.query.filter(User.name == userdata.get('name')).first()
         print user
 
         if user:
-            if user.password == userdata['password']:
+            if user.password == userdata.get('password'):
                 flash("login OK. Jump Jump Jump...")
                 response = make_response(redirect(url_for('problems')))
                 response.set_cookie('user_id', str(user.id))
@@ -54,12 +55,14 @@ def sign():
     if request.method == 'POST':
         userdata = request.form.to_dict()
         print 'sign - userdata: ', userdata
-        if len(userdata['name']) < 3:
+        if len(userdata.get('name')) < 3:
             flash(" The length of username should be more than 2 bytes. please input again.")
-        elif userdata['password'] != userdata['password1']:
+        elif userdata.get('password') != userdata.get('password1'):
             flash(" Your passwords are different, please input again.")
         else:
-            new_user = User(name=userdata['name'], password=userdata['password'], email=userdata['email'])
+            del userdata['password1']
+            # new_user = User(name=userdata['name'], password=userdata['password'], email=userdata['email'])
+            new_user = User(**userdata)
             db.session.add(new_user)
             try:
                 db.session.commit()
@@ -79,12 +82,11 @@ def retrieve_password():
         # user_id=request.cookies.get('user_id')
         user_data = request.form.to_dict()
         print 'retrieve_password , user_data: ', user_data
-        # user = alchemy_db.get_user_by_name(user_data['name'])
         user = User.query.filter(User.name == user_data['name'], User.email == user_data['email']).first()
         print user
         if user:
             send_email(str(user.email), user.password)
-            return "<h1>你好，{0},已经将密码发到你的邮箱 <b> {1} </b> 请查收验证。</h1>".format(user.name, user.email)
+            return "<h1>你好，{0} 。已经将密码发到你的邮箱 <b> {1} </b> , 请查收验证。</h1>".format(user.name, user.email)
         else:
             flash("咦？ 这个邮箱还没有注册耶~ .../n  (●'◡'●) come on ，baby  ❤ ~ ")
     return render_template('retrieve_password.html')
@@ -151,10 +153,14 @@ def problem_id(problem_id):
         else:
             if request.method == 'POST':
                 solution_data = request.form.to_dict()
-                new_solution = Solution(detail=solution_data['detail'], candidate_id=user.id,
-                                        problem_id=int(problem_id))
-                db.session.add(new_solution)
-                db.session.commit()
+                if solution_data['detail']:
+                    new_solution = Solution(detail=solution_data['detail'], candidate_id=user.id,
+                                            problem_id=int(problem_id))
+                    db.session.add(new_solution)
+                    try:
+                        db.session.commit()
+                    except:
+                        db.session.rollback()
 
         solutions_data = Solution.query.filter(Solution.problem_id == int(problem_id)).all()
         return render_template('problem_id.html', problem=problem_data, solutions=solutions_data, username=user.name)

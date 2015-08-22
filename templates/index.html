@@ -17,20 +17,79 @@
 {% endif %}
 {% endblock %}
 
+
 {% block content %}
 
-<!-- test -->
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;灵气大概早被污染，谁为了生活不变</p>
-<hr>
-
 {% if username %}
-<p> {{ username }} </p>
-<p> 这里应该放用户自己提的问题，和自己做的题目</p>
+<h5> 我们的目标是星辰大海，扬帆起航吧，魔法少女~ </h5>
+<div class="myTables">
+    <p> 我的问题 </p>
 
+    <table>
+        {% if my_problems %}
+        <tr>
+            <th>#</th>
+            <th>题目</th>
+            {#
+            <th>题目描述</th>
+            #}
+            <th>发布人</th>
+        </tr>
+        {% for problem in my_problems %}
+        <tr>
+            <td>{{ problem.id }}</td>
+            <td><a href='/problems/{{ problem.id }}'>{{ problem.title }}</a></td>
+            {#
+            <td>{{ problem.detail }}</td>
+            #}
+            <td>{{ problem.creator.name }}</td>
+        </tr>
+
+        {% endfor %}
+        {% endif %}
+    </table>
+
+</div>
+
+<br>
+<hr>
+<br>
+<div class="myTables">
+    <p> 我的参与 </p>
+
+    <table>
+        {% if my_solutions %}
+        <tr>
+            <th>#</th>
+            <th>题目</th>
+            {#
+            <th>题目描述</th>
+            #}
+            <th>发布人</th>
+        </tr>
+        {% for solution in my_solutions %}
+        <tr>
+            <td>{{ solution.problem_id }}</td>
+            <td><a href='/problems/{{ solution.problem_id }}'>{{ solution.problem.title }}</a></td>
+            {#
+            <td>{{ problem.detail }}</td>
+            #}
+            <td>{{ solution.problem.creator.name }}</td>
+        </tr>
+
+        {% endfor %}
+        {% endif %}
+    </table>
+
+</div>
 {% else %}
+<div class="passage">
+    <p> Come on ~ ♥ little Apple , try to finish this and you will grow more delicious ♥</p>
 
-<p> &nbsp;&nbsp;&nbsp;&nbsp;Come on ~ ♥ little Apple , try to finish this and you will grow more delicious ♥</p>
-<p> &nbsp;&nbsp;&nbsp;&nbsp;这里应该放一些有趣的题目 </p>
-
+    <p>这里应该放一些有趣的题目 </p>
+    <!-- test -->
+    <p>灵气大概早被污染，谁为了生活不变</p>
+    <hr>
+</div>
 {% endif %}
 {% endblock %}
