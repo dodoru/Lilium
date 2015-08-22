@@ -44,8 +44,7 @@ class Solution(db.Model):
     candidate_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     candidate = db.relationship('User', backref='solutions')
     problem_id = db.Column(db.Integer, db.ForeignKey('problems.id'))
-    problem = db.relationship('Pro'
-                              'blem', backref='solutions')
+    problem = db.relationship('Problem', backref='solutions')
 
     def __repr__(self):
         return u"< solution_id:{0},{1},cid:{2},pid:{3} >".format(self.id, self.detail, self.candidate_id,
