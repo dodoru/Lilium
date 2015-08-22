@@ -38,7 +38,7 @@
 ![image](https://github.com/dodoru/Lilium/blob/master/images/settings.jpg)
 
 + 4 登陆后的管理员-设置-比普通用户多一个可以查看用户列表的权限
-![image](https://github.com/dodoru/Lilium/blob/master/images/admin_user_list.jpg)
+![image](https://github.com/dodoru/Lilium/blob/master/images/admin_settings.jpg)
 
 + 5 登陆后的管理员-设置-用户列表-可以增加删除修改其他用户的信息
 ![image](https://github.com/dodoru/Lilium/blob/master/images/admin_user_list.jpg)
